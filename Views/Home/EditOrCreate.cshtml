@@ -1,0 +1,55 @@
+﻿@model Link
+@{
+    if (Model != null)
+    {
+        ViewData["Title"] = "Edit Link";
+    }
+    else
+    {
+        ViewData["Title"] = "Create Link";
+    }
+}
+@section links {
+    <link rel="stylesheet" href="~/css/EditOrCreate.css" />
+}
+<section class="link">
+    <form asp-controller="Home" , asp-action="EditOrCreate" method="post">
+
+        <input type="hidden" name="id" value="@Model?.Id" />
+        <div>
+            <label for="longurl">Long URL</label>
+            <input type="url" id="longurl" name="longurl" value="@Model?.LongURL" />
+        </div>
+        <div>
+            <label for="shorturl">Short URL</label>
+            <input type="url" id="shorturl" name="shorturl" value="@Model?.ShortURL" />
+            <input type="button" onclick="GenerateShortedLink()" value="Generate short url"/>
+        </div>
+        @if (Model != null)
+        {
+            <input type="submit" value="Edit" />
+        }
+        else
+        {
+            <input type="submit" value="Create" />
+        }
+    </form>
+</section>
+@section scripts {
+    <script>
+        function GenerateShortedLink() {
+            let url = '@Url.Action("GenerateShortedLink", "Home")';
+            let longurl = $("#longurl").val();
+            console.log(longurl);
+            $.ajax({
+                type: "GET",
+                url: "/Home/GenerateShortedLink",
+                data: { longURL: longurl },
+                success: function (data) {
+                    console.log(data);
+                    $("#shorturl").val(data);
+                }
+            });
+        }
+    </script>
+}
