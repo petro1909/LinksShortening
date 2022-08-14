@@ -1,0 +1,9 @@
+﻿section.link form div label{
+    min-width : 70px;
+}
+
+section.link form div input[type=url] {
+    min-width: 300px;
+    max-width: 500px;
+    overflow-x: auto;
+}

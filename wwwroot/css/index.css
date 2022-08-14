@@ -1,0 +1,21 @@
+﻿
+table.links {
+    border-spacing: 15px;
+}
+
+tr {
+    border-bottom: 1px solid black;
+}
+
+
+td {
+    border: 1px solid black;
+}
+
+td p, th p {
+    margin : 5px ;
+    max-width: 350px;
+    min-width : 50px;
+    overflow-x: auto;
+    text-align: center;
+}
