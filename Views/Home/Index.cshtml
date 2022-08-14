@@ -1,8 +1,68 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Link>
+@{
+    ViewData["Title"] = "Links";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section links
+{
+    <link rel="stylesheet" href="~/css/index.css" />
+}
+<div>
+    <table class="links">
+        <thead>
+            <tr>
+                
+                <th><p>@Html.DisplayNameFor(model => model.Id)</p></th>
+                <th><p>@Html.DisplayNameFor(model => model.LongURL)</p></th>
+                <th><p>@Html.DisplayNameFor(model => model.ShortURL)</p></th>
+                <th><p>@Html.DisplayNameFor(model => model.CreationDate)</p></th>
+                <th><p>@Html.DisplayNameFor(model => model.Jumps)</p></th>
+                <th><p>Edit</p></th>
+                <th><p>Delete</p></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Link link in Model)
+            {
+            <tr>
+                <td>
+                    <p>@link.Id</p>
+                </td>
+                <td>
+                    <p><a href="#" onclick="linkJump(@link.Id, '@link.LongURL')">@link.LongURL</a></p>
+                </td>
+                <td>
+                    <p><a href="#" onclick="linkJump(@link.Id, '@link.LongURL')">@link.ShortURL</a></p>
+                </td>
+                <td>
+                    <p>@link.CreationDate</p>
+                </td>
+                <td>
+                    <p>@link.Jumps</p>
+                </td>
+                <td>
+                    <p>@Html.ActionLink("Edit", "EditOrCreate", "Home", new { id = link.Id })</p>
+                </td>
+                <td>
+                    <p>@Html.ActionLink("Delete", "Delete", "Home", new { id = link.Id })</p>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
+@section scripts
+{
+    <script>
+        function linkJump(linkId, longURL) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/AcceptLinkJump",
+                data: { id: linkId },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+            window.location.replace(longURL);
+        }
+    </script>
+}
