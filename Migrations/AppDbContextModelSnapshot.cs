@@ -24,11 +24,11 @@ namespace LinksShortening.Migrations
                         .HasColumnType("INT")
                         .HasColumnName("Id");
 
-                    b.Property<DateTime>("CreationDate")
+                    b.Property<DateTime?>("CreationDate")
                         .HasColumnType("DATE")
                         .HasColumnName("CreationDate");
 
-                    b.Property<int>("Jumps")
+                    b.Property<int?>("Jumps")
                         .HasColumnType("INT")
                         .HasColumnName("Jumps");
 

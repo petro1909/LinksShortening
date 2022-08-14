@@ -15,6 +15,7 @@ namespace LinksShortening.Database
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+            Database.Migrate();
             //Database.EnsureCreated();
         }
 
@@ -31,8 +32,8 @@ namespace LinksShortening.Database
             link.HasKey(l => l.Id);
 
             link.Property(l => l.LongURL).HasColumnName("LongURL").HasColumnType("TEXT");
-            link.Property(l => l.CreationDate).HasColumnName("CreationDate").HasColumnType("DATE");
             link.Property(l => l.ShortURL).HasColumnName("ShortURL").HasColumnType("TEXT");
+            link.Property(l => l.CreationDate).HasColumnName("CreationDate").HasColumnType("DATE");
             link.Property(l => l.Jumps).HasColumnName("Jumps").HasColumnType("INT");
         }
     }
