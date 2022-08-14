@@ -10,8 +10,6 @@
     <table class="links">
         <thead>
             <tr>
-                
-                <th><p>@Html.DisplayNameFor(model => model.Id)</p></th>
                 <th><p>@Html.DisplayNameFor(model => model.LongURL)</p></th>
                 <th><p>@Html.DisplayNameFor(model => model.ShortURL)</p></th>
                 <th><p>@Html.DisplayNameFor(model => model.CreationDate)</p></th>
@@ -24,9 +22,6 @@
             @foreach (Link link in Model)
             {
             <tr>
-                <td>
-                    <p>@link.Id</p>
-                </td>
                 <td>
                     <p><a href="#" onclick="linkJump(@link.Id, '@link.LongURL')">@link.LongURL</a></p>
                 </td>
