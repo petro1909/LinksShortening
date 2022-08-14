@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LinksShortening.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinksShortening
 {
@@ -23,7 +25,9 @@ namespace LinksShortening
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<AppDbContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8,0,21))));
+            services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,15 +46,13 @@ namespace LinksShortening
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
-
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                app.UseMvc(configure => configure.MapRoute(
+                       name: "default",
+                       template: "{controller=Home}/{action=Index}/{id?}"));
             });
         }
     }
