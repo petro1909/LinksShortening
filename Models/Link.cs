@@ -10,7 +10,7 @@ namespace LinksShortening.Models
         public int Id { set; get; }
         public string LongURL { set; get; }
         public string ShortURL { set; get; }
-        public DateTime? CreationDate { set; get; }
+        public DateTime CreationDate { set; get; }
         public int? Jumps { set; get; }
 
         public Link() { }
