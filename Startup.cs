@@ -28,6 +28,7 @@ namespace LinksShortening
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AppDbContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8,0,21))));
             services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,11 +44,14 @@ namespace LinksShortening
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            
             app.UseAuthorization();
-
+            
+            app.UseCors(builder => builder.AllowAnyOrigin());
+            
             app.UseMvc(endpoints =>
             {
                 app.UseMvc(configure => configure.MapRoute(
