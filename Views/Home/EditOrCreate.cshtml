@@ -18,11 +18,11 @@
         <input type="hidden" name="id" value="@Model?.Id" />
         <div>
             <label for="longurl">Long URL</label>
-            <input type="url" id="longurl" name="longurl" value="@Model?.LongURL" />
+            <input type="url" id="longurl" name="longurl" value="@Model?.LongURL"/>
         </div>
         <div>
             <label for="shorturl">Short URL</label>
-            <input type="url" id="shorturl" name="shorturl" value="@Model?.ShortURL" />
+            <input type="url" id="shorturl" name="shorturl" value="@Model?.ShortURL" readonly/>
             <input type="button" onclick="GenerateShortedLink()" value="Generate short url"/>
         </div>
         @if (Model != null)
@@ -37,6 +37,7 @@
 </section>
 @section scripts {
     <script>
+
         function GenerateShortedLink() {
             let url = '@Url.Action("GenerateShortedLink", "Home")';
             let longurl = $("#longurl").val();
