@@ -9,28 +9,35 @@ namespace LinksShortening.Service
     {
         public static string GenerateShortedLink(string longURL)
         {
+            // Get positive hash code
             int hashcode = longURL.GetHashCode();
             if (hashcode < 0) hashcode *= -1;
 
-            List<int> hashTwoDecimalsItems = new List<int>();
-            int temp = hashcode;
+            
+            List<int> hashTwoDigitsItems = new List<int>();
+            
+            // Split hashcode to two-digit numbers
             while (hashcode > 1)
             {
                 int hashItem = hashcode % 100;
 
-                hashTwoDecimalsItems.Add(hashItem);
+                hashTwoDigitsItems.Add(hashItem);
                 hashcode /= 100;
             }
 
             Random r = new Random();
-            for (int i = 0; i < hashTwoDecimalsItems.Count; i++)
-            {
-                Random r1 = new Random(r.Next(0, hashTwoDecimalsItems[i]));
 
-                hashTwoDecimalsItems[i] = 97 + r1.Next(0, 24);
+            //Randomize each two-digit hashcode part
+            for (int i = 0; i < hashTwoDigitsItems.Count; i++)
+            {
+                //Create random entity with random seed
+                Random r1 = new Random(r.Next(0, hashTwoDigitsItems[i]));
+                //Generate random number that is more then 97 and less then 123
+                hashTwoDigitsItems[i] = 97 + r1.Next(0, 26);
             }
 
-            string strHashCode = string.Join("", hashTwoDecimalsItems.Select(i => (char)i));
+            //Split randomized hashcode digits to streing
+            string strHashCode = string.Join("", hashTwoDigitsItems.Select(i => (char)i));
             return $"https://links.by/{strHashCode}";
         }
     }

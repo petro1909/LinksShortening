@@ -53,7 +53,7 @@ namespace LinksShortening.Controllers
             {
                 return View(link);
             }
-
+            //Add new link
             Link actualLink = context.Links.Find(link.Id);
             if(actualLink == null)
             {
@@ -61,7 +61,8 @@ namespace LinksShortening.Controllers
                 link.Jumps = 0;
                 link.CreationDate = DateTime.Now;
                 context.Links.Add(link);
-            } 
+            }
+            //Edit existing link
             else
             {
                 actualLink.LongURL = link.LongURL;
@@ -90,6 +91,7 @@ namespace LinksShortening.Controllers
             return LinkService.GenerateShortedLink(longURL);
         }
 
+        //Accepting link follow
         public void AcceptLinkJump(int id)
         {
             Link link = context.Links.Find(id);
