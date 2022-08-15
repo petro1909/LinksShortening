@@ -23,13 +23,13 @@
             {
             <tr>
                 <td>
-                    <p><a href="#" onclick="linkJump(@link.Id, '@link.LongURL')">@link.LongURL</a></p>
+                    <p><a href="@link.LongURL">@link.LongURL</a></p>
                 </td>
                 <td>
                     <p><a href="#" onclick="linkJump(@link.Id, '@link.LongURL')">@link.ShortURL</a></p>
                 </td>
                 <td>
-                    <p>@link.CreationDate</p>
+                    <p>@link.CreationDate.ToLongDateString()</p>
                 </td>
                 <td>
                     <p>@link.Jumps</p>
