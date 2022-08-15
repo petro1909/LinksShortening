@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using LinksShortening.Database;
 using Microsoft.EntityFrameworkCore;
+using LinksShortening.Service;
+using LinksShortening.Validate;
 
 namespace LinksShortening.Controllers
 {
@@ -18,7 +20,6 @@ namespace LinksShortening.Controllers
         public HomeController(AppDbContext context)
         {
             this.context = context;
-            context.Database.Migrate();
         }
 
         [HttpGet]
@@ -48,6 +49,11 @@ namespace LinksShortening.Controllers
         [HttpPost]
         public IActionResult EditOrCreate(Link link)
         {
+            if (!LinkValidator.Validate(link.LongURL))
+            {
+                return View(link);
+            }
+
             Link actualLink = context.Links.Find(link.Id);
             if(actualLink == null)
             {
@@ -55,7 +61,8 @@ namespace LinksShortening.Controllers
                 link.Jumps = 0;
                 link.CreationDate = DateTime.Now;
                 context.Links.Add(link);
-            } else
+            } 
+            else
             {
                 actualLink.LongURL = link.LongURL;
                 actualLink.ShortURL = link.ShortURL;
@@ -66,7 +73,7 @@ namespace LinksShortening.Controllers
 
         }
 
-        //[HttpDelete]
+        [HttpGet]
         public IActionResult Delete(int id)
         {
             Link link = context.Links.Find(id);
@@ -80,29 +87,7 @@ namespace LinksShortening.Controllers
 
         public string GenerateShortedLink(string longURL)
         {
-            int hashcode = longURL.GetHashCode();
-            if (hashcode < 0) hashcode *= -1;
-
-            List<int> hashTwoDecimalsItems = new List<int>();
-            int temp = hashcode;
-            while(hashcode > 1)
-            {
-                int hashItem = hashcode % 100;
-
-                hashTwoDecimalsItems.Add(hashItem);
-                hashcode /= 100;
-            }
-
-            Random r = new Random();
-            for (int i = 0; i < hashTwoDecimalsItems.Count; i++)
-            {
-                Random r1 = new Random(r.Next(0,hashTwoDecimalsItems[i]));
-                
-                hashTwoDecimalsItems[i] = 97 + r1.Next(0, 24);
-            }
-
-            string strHashCode = string.Join("", hashTwoDecimalsItems.Select(i => (char)i));
-            return $"https://links.by/{strHashCode}";
+            return LinkService.GenerateShortedLink(longURL);
         }
 
         public void AcceptLinkJump(int id)
