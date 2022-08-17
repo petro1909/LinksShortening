@@ -10,6 +10,7 @@ using LinksShortening.Database;
 using Microsoft.EntityFrameworkCore;
 using LinksShortening.Service;
 using LinksShortening.Validate;
+using LinksShortening.ViewModel;
 
 namespace LinksShortening.Controllers
 {
@@ -23,9 +24,18 @@ namespace LinksShortening.Controllers
         }
 
         [HttpGet]
+        [Route("/Links")]
         public IActionResult Index()
         {
-            return View(context.Links.ToList());
+            List<Link> links = context.Links.ToList();
+            List<LinkViewModel> linksVM = new List<LinkViewModel>();
+
+            foreach(Link link in links)
+            {
+                linksVM.Add(new LinkViewModel(link));
+            }
+
+            return View(linksVM);
         }
 
         [HttpGet]
@@ -41,21 +51,23 @@ namespace LinksShortening.Controllers
             Link link = context.Links.Find(id);
             if (link != null)
             {
-                return View(link);
+                return View(new LinkViewModel(link));
             }
-            return View();
+
+            return View(new LinkViewModel(link));
         }
 
         [HttpPost]
-        public IActionResult EditOrCreate(Link link)
+        public IActionResult EditOrCreate(LinkViewModel linkVM)
         {
+            Link link = linkVM.Link;
             if (!LinkValidator.Validate(link.LongURL))
             {
                 return View(link);
             }
             //Add new link
             Link actualLink = context.Links.Find(link.Id);
-            if(actualLink == null)
+            if (actualLink == null)
             {
                 link.Id = 0;
                 link.Jumps = 0;
@@ -78,7 +90,7 @@ namespace LinksShortening.Controllers
         public IActionResult Delete(int id)
         {
             Link link = context.Links.Find(id);
-            if (link != null) 
+            if (link != null)
             {
                 context.Links.Remove(link);
                 context.SaveChanges();
@@ -88,19 +100,33 @@ namespace LinksShortening.Controllers
 
         public string GenerateShortedLink(string longURL)
         {
-            return LinkService.GenerateShortedLink(longURL);
+            return $"https://localhost:44324/{LinkService.GenerateShortedLink(longURL)}";
         }
 
         //Accepting link follow
-        public void AcceptLinkJump(int id)
+        [Route("/{shortLink}")]
+        public IActionResult AcceptLinkJump(string shortLink)
         {
-            Link link = context.Links.Find(id);
-            if (link != null)
+            Link link;
+            try
             {
-                link.Jumps++;
-                context.Links.Update(link);
-                context.SaveChanges();
+                link = context.Links.Single(l => l.ShortURL == shortLink);
+                if (link == null)
+                {
+                    return default;
+                }
+            } 
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return default;
             }
+
+            link.Jumps++;
+            context.Links.Update(link);
+            context.SaveChanges();
+
+            return Redirect(link.LongURL);
         }
 
 
