@@ -10,7 +10,8 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
+        "launchBrowser": true,
+        "launchUrl": "Links",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -18,7 +19,8 @@
     "LinksShortening": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": true,
+        "launchBrowser": true,
+        "launchUrl": "Links",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
