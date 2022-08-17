@@ -1,4 +1,4 @@
-﻿@model Link
+﻿@model LinkViewModel
 @{
     if (Model != null)
     {
@@ -15,14 +15,14 @@
 <section class="link">
     <form asp-controller="Home" , asp-action="EditOrCreate" method="post">
 
-        <input type="hidden" name="id" value="@Model?.Id" />
+        <input type="hidden" asp-for="Id" value="@Model?.Id" />
         <div>
             <label for="longurl">Long URL</label>
-            <input type="url" id="longurl" name="longurl" value="@Model?.LongURL"/>
+            <input type="url" id="longurl" asp-for="LongURL" name="longurl" value="@Model?.LongURL"/>
         </div>
         <div>
             <label for="shorturl">Short URL</label>
-            <input type="url" id="shorturl" name="shorturl" value="@Model?.ShortURL" readonly/>
+            <input type="url" id="shorturl" asp-for="ShortURL" name="shorturl" value="@Model?.ShortURL" readonly/>
             <input type="button" onclick="GenerateShortedLink()" value="Generate short url"/>
         </div>
         @if (Model != null)

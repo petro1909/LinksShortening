@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Link>
+﻿@model IEnumerable<LinkViewModel>
 @{
     ViewData["Title"] = "Links";
 }
@@ -19,14 +19,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Link link in Model)
+            @foreach (LinkViewModel link in Model)
             {
             <tr>
                 <td>
                     <p><a href="@link.LongURL">@link.LongURL</a></p>
                 </td>
                 <td>
-                    <p><a href="#" onclick="linkJump(@link.Id, '@link.LongURL')">@link.ShortURL</a></p>
+                    <p><a href="@link.ShortURL">@link.ShortURL</a></p>
                 </td>
                 <td>
                     <p>@link.CreationDate.ToLongDateString()</p>
@@ -48,11 +48,11 @@
 @section scripts
 {
     <script>
-        function linkJump(linkId, longURL) {
+        function linkJump(shortLink) {
             $.ajax({
                 type: "POST",
                 url: "/Home/AcceptLinkJump",
-                data: { id: linkId },
+                data: { shortLink: shortLink },
                 success: function (data) {
                     console.log(data);
                 }
