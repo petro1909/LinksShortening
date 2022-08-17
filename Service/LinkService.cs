@@ -38,7 +38,7 @@ namespace LinksShortening.Service
 
             //Split randomized hashcode digits to streing
             string strHashCode = string.Join("", hashTwoDigitsItems.Select(i => (char)i));
-            return $"https://links.by/{strHashCode}";
+            return $"{strHashCode}";
         }
     }
 }
